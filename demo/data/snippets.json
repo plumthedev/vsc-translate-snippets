@@ -1,0 +1,25 @@
+{
+	"b-alert-header": {
+		"prefix": "b-alert-header",
+		"body": [
+			"<div class=\"alert alert-${1|primary,secondary,success,danger,warning,info,light,dark|}\" role=\"alert\">",
+			"\t<h4 class=\"alert-heading\">${2:Header}</h4>",
+			"\t${3:Content}",
+			"</div>"
+		]
+	},
+	"b-alert": {
+		"prefix": "b-alert",
+		"body": [
+			"<div class=\"alert alert-${1|primary,secondary,success,danger,warning,info,light,dark|}\" role=\"alert\">",
+			"\t${2:Content}",
+			"</div>"
+		]
+	},
+	"b-badge-pill": {
+		"prefix": "b-badge-pill",
+		"body": [
+			"<span class=\"badge badge-pill badge-${1|primary,secondary,success,danger,warning,info,light,dark|}\">${2:Text}</span>"
+		]
+    }
+}

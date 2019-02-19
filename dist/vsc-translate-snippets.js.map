@@ -1,0 +1,1 @@
+{"version":3,"file":"vsc-translate-snippets.js","sourceRoot":"","sources":["../src/vsc-translate-snippets.ts"],"names":[],"mappings":";;AACA,2CAAgD;AAEhD;IAAA;IAKA,CAAC;IAJU,mCAAI,GAAX,UAAY,OAAO;QACf,IAAM,IAAI,GAAG,IAAI,cAAc,CAAC,OAAO,CAAC,CAAC;QACzC,IAAI,CAAC,KAAK,EAAE,CAAC;IACjB,CAAC;IACL,2BAAC;AAAD,CAAC,AALD,IAKC;AAEY,QAAA,KAAK,GAAG,IAAI,oBAAoB,EAAE,CAAC"}

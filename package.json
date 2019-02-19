@@ -1,0 +1,18 @@
+{
+  "name": "vsc-translate-snippets",
+  "version": "1.0.0",
+  "description": "Add more programming languages ​​for your Visual Studio Code snippet plugin",
+  "main": "index.js",
+  "scripts": {
+    "dev": "tsc --watch",
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "plum",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^11.9.4",
+    "html2pug": "^2.0.1",
+    "typescript": "^3.3.3"
+  }
+}
