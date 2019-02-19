@@ -1,4 +1,4 @@
-# VSC tTranslate Snippets
+# VSC Translate Snippets
 
 Add more programming languages ​​for your Visual Studio Code snippet plugin
 
