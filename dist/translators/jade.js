@@ -1,89 +1,82 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var html2pug = require('html2pug');
-var fs = require('fs');
+var system_1 = require("./../modules/system");
+var expression_1 = require("./../modules/expression");
 var jadeTranslator = (function () {
-    function jadeTranslator(options) {
-        this.source = '';
-        this.options = options;
+    function jadeTranslator(args) {
+        this.args = args;
+        this.system = new system_1.default();
+        this.expression = new expression_1.default();
+        this.originalSource = this.system.readFile(this.args.source);
+        this.originalSourceSnippets = new Array(0);
+        this.translatedSource = this.system.readFile(this.args.source);
+        this.translatedSourceSnippets = new Array(0);
     }
-    jadeTranslator.prototype.readFile = function () {
+    jadeTranslator.prototype.translate = function () {
         var _this = this;
-        this.log("Reading " + this.options.sourceFile + " file");
-        fs.readFile(this.options.sourceFile, 'utf8', function (err, contents) {
-            if (err)
-                throw err;
-            _this.log('Read correctly');
-            _this.saveSource(contents);
-            _this.startTranslation();
+        this.getSnippets();
+        console.info("Translating " + this.originalSourceSnippets.length + " phrases");
+        this.originalSourceSnippets.forEach(function (snippet) {
+            var translatedSnippet = _this.translateSingleSnippet(snippet);
+            _this.translatedSource = _this.expression.replace(_this.translatedSource, snippet, translatedSnippet);
         });
+        this.system.createFile(this.translatedSource, this.args.translatedPath, this.args.translatedFilename);
+        console.log('Translated!');
     };
-    jadeTranslator.prototype.saveSource = function (source) {
-        this.source = source;
-    };
-    jadeTranslator.prototype.parseSnippet = function (snippet) {
-        var snippetBodyArray = JSON.parse(snippet);
-        var snippetBodyString = this.conactSnippetBody(snippetBodyArray);
-        return snippetBodyString;
-    };
-    jadeTranslator.prototype.stringifySnippet = function (snippet) {
-        var translatedSnippetArray = this.createTranslatedSnippedArray(snippet);
-        var translatedSnippetString = JSON.stringify(translatedSnippetArray);
-        return translatedSnippetString;
-    };
-    jadeTranslator.prototype.translateSingleSnippet = function (bodySnippet) {
-        var parsedSnippet = this.parseSnippet(bodySnippet);
-        var translatedSnippet = this.translateToPug(parsedSnippet);
-        var translatedSnippetString = this.stringifySnippet(translatedSnippet);
-        return translatedSnippetString;
-    };
-    jadeTranslator.prototype.startTranslation = function () {
-        var _this = this;
-        var bodySnippets = this.getBodySnippets();
-        this.log("Translating " + bodySnippets.length + " phrases");
-        bodySnippets.forEach(function (bodySnippet) {
-            var translatedSnippet = _this.translateSingleSnippet(bodySnippet);
-            var translatedSource = _this.source.replace(bodySnippet, translatedSnippet);
-            _this.saveSource(translatedSource);
-        });
-        this.createTranslatedFile();
-    };
-    jadeTranslator.prototype.getBodySnippets = function () {
-        var bodySnippetRegex = /(\[[\s\S]+?\])/g;
-        var bodySnippets = this.source.match(bodySnippetRegex);
-        return bodySnippets;
-    };
-    jadeTranslator.prototype.createTranslatedFile = function () {
-        var _this = this;
-        this.log("Creating a file with translations");
-        this.createFolderForTranslated();
-        fs.writeFile("./translated/" + this.options.filename, this.source, function (err) {
-            if (err)
-                throw err;
-            _this.log('Work has been completed');
-        });
-    };
-    jadeTranslator.prototype.createFolderForTranslated = function () {
-        if (!fs.existsSync('./translated')) {
-            fs.mkdirSync('./translated');
+    jadeTranslator.prototype.prepareToTranslate = function (snippet) {
+        var preparedSnippet = this.expression.replace(snippet, '"body": ', '');
+        preparedSnippet = this.expression.parse(preparedSnippet);
+        if (preparedSnippet instanceof Array) {
+            preparedSnippet = this.expression.createString(preparedSnippet);
         }
+        return preparedSnippet;
     };
-    jadeTranslator.prototype.translateToPug = function (snippetBody) {
-        return html2pug(snippetBody, { tabs: true, fragment: true });
+    jadeTranslator.prototype.translateSingleSnippet = function (snippet) {
+        var prepared = this.prepareToTranslate(snippet);
+        var translated = this.translateToJade(prepared);
+        return translated;
     };
-    jadeTranslator.prototype.conactSnippetBody = function (bodyArray) {
-        return bodyArray.join('');
+    jadeTranslator.prototype.translateToJade = function (snippetBody) {
+        var translated = html2pug(snippetBody, { tabs: true, fragment: true });
+        var translatedArray = this.expression.createArray(translated, '\n');
+        var stringify = this.expression.stringify(translatedArray);
+        var readySnippet = this.expression.join('"body": ', stringify);
+        this.translatedSourceSnippets.push(readySnippet);
+        return readySnippet;
     };
-    jadeTranslator.prototype.createTranslatedSnippedArray = function (translatedSnippet) {
-        return translatedSnippet.split('\n');
+    jadeTranslator.prototype.getSnippets = function () {
+        var bodySnippetRegex = /("body": \"[\s\S]+?\"$)|("body": \[[\s\S]+?\])/gm;
+        this.originalSourceSnippets = this.expression.match(bodySnippetRegex, this.originalSource);
     };
-    jadeTranslator.prototype.log = function (msg) {
-        console.log(msg);
-    };
-    jadeTranslator.prototype.start = function () {
-        this.log('Starting translating');
-        this.readFile();
-    };
+    Object.defineProperty(jadeTranslator.prototype, "getOriginal", {
+        get: function () {
+            return this.originalSource;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(jadeTranslator.prototype, "getOriginalSnippets", {
+        get: function () {
+            return this.originalSourceSnippets;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(jadeTranslator.prototype, "getJade", {
+        get: function () {
+            return this.translatedSource;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(jadeTranslator.prototype, "getJadeSnippets", {
+        get: function () {
+            return this.translatedSourceSnippets;
+        },
+        enumerable: true,
+        configurable: true
+    });
     return jadeTranslator;
 }());
 exports.default = jadeTranslator;
