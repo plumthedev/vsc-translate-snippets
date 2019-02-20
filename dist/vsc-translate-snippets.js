@@ -5,8 +5,8 @@ var VSCTranslateSnippets = (function () {
     function VSCTranslateSnippets() {
     }
     VSCTranslateSnippets.prototype.jade = function (options) {
-        var jade = new jade_1.default(options);
-        jade.start();
+        var jadeTranslator = new jade_1.default(options);
+        jadeTranslator.translate();
     };
     return VSCTranslateSnippets;
 }());

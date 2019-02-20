@@ -1,6 +1,7 @@
 const { vscts } = require('./../dist/vsc-translate-snippets');
 
 vscts.jade({
-    sourceFile: './data/snippets.json',
-    filename: 'jade-snippets.json'
+    source: './data/snippets.json',
+    translatedPath: './translated/',
+    translatedFilename: 'jade-snippets.json'
 });

@@ -1,10 +1,15 @@
-// modules
-import jadeTranslator from "./translators/jade";
+// translators
+import JadeTranslator from "./translators/jade";
 
-class VSCTranslateSnippets{
-    public jade(options){
-        const jade = new jadeTranslator(options);
-        jade.start();
+class VSCTranslateSnippets {
+    public jade(options: {
+        source: string,
+        translatedPath: string,
+        translatedFilename: string
+    }){
+        const jadeTranslator = new JadeTranslator(options);
+
+        jadeTranslator.translate();
     }
 }
 
