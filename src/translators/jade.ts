@@ -1,55 +1,25 @@
 const html2pug: any = require('html2pug');
-const fs: any = require('fs');
 
-export default class jadeTranslator{
+export default class jadeTranslator {
     private source;
-    private options;
 
-    constructor(options: any){
-        this.source = '';
-        this.options = options;
+    constructor(source: any) {
+        this.source = source;
+        this.start();
     }
 
-    private readFile(){
-        this.log(`Reading ${this.options.sourceFile} file`);
-
-        fs.readFile(this.options.sourceFile, 'utf8', (err, contents) => {
-            if(err) throw err;
-            this.log('Read correctly');
-            this.saveSource(contents);
-            this.startTranslation();
-        });
+    public start() {
+        this.log('Starting translating');
+        this.startTranslation();
     }
 
-    private saveSource(source: string){
+    private saveSource(source: string) {
         this.source = source;
     }
 
-    private parseSnippet(snippet){
-        const snippetBodyArray = JSON.parse(snippet);
-        const snippetBodyString = this.conactSnippetBody(snippetBodyArray);
-
-        return snippetBodyString;
-    }
-
-    private stringifySnippet(snippet){
-        const translatedSnippetArray = this.createTranslatedSnippedArray(snippet);
-        const translatedSnippetString = JSON.stringify(translatedSnippetArray);
-
-        return translatedSnippetString;
-    }
-
-    private translateSingleSnippet(bodySnippet: string){
-        const parsedSnippet = this.parseSnippet(bodySnippet);
-        const translatedSnippet = this.translateToPug(parsedSnippet);
-        const translatedSnippetString = this.stringifySnippet(translatedSnippet);
-
-        return translatedSnippetString;
-    }
-
-    private startTranslation(){
+    private startTranslation() {
         const bodySnippets = this.getBodySnippets();
-        
+
         this.log(`Translating ${bodySnippets.length} phrases`);
 
         bodySnippets.forEach((bodySnippet) => {
@@ -58,52 +28,54 @@ export default class jadeTranslator{
 
             this.saveSource(translatedSource);
         });
-        
-        this.createTranslatedFile();
     }
 
-    private getBodySnippets(){
-        const bodySnippetRegex = /(\[[\s\S]+?\])/g;
-        const bodySnippets = this.source.match(bodySnippetRegex);
+    private translateSingleSnippet(bodySnippet: string) {
+        const parsedSnippet = this.parseSnippet(bodySnippet);
+        const translatedSnippet = this.translateToPug(parsedSnippet);
+        const translatedSnippetString = this.stringifySnippet(translatedSnippet);
 
-        return bodySnippets;
+        return translatedSnippetString;
     }
 
-    private createTranslatedFile(){
-        this.log(`Creating a file with translations`);
-
-        this.createFolderForTranslated();
-
-        fs.writeFile(`./translated/${this.options.filename}`, this.source, (err) => {
-            if(err) throw err;
-            this.log('Work has been completed');
-        });
-    }
-
-    private createFolderForTranslated(){
-        if(!fs.existsSync('./translated')){
-            fs.mkdirSync('./translated');
-        }
-    }
-
-    private translateToPug(snippetBody){
+    private translateToPug(snippetBody) {
         return html2pug(snippetBody, { tabs: true, fragment: true });
     }
 
-    private conactSnippetBody(bodyArray: Array<string>){
-        return bodyArray.join('');
+    private stringifySnippet(snippet) {
+        const translatedSnippetArray = this.createTranslatedSnippedArray(snippet);
+        const translatedSnippetString = JSON.stringify(translatedSnippetArray);
+
+        return translatedSnippetString;
     }
 
-    private createTranslatedSnippedArray(translatedSnippet: string){
+    private parseSnippet(snippet) {
+        const snippetBodyArray = JSON.parse(snippet);
+        const snippetBodyString = this.conactSnippetBody(snippetBodyArray);
+
+        return snippetBodyString;
+    }
+
+    private createTranslatedSnippedArray(translatedSnippet: string) {
         return translatedSnippet.split('\n');
     }
 
-    private log(msg: string){
+    private getBodySnippets() {
+        const bodySnippetRegex = /(\[[\s\S]+?\])/g;
+        const bodySnippets = this.source.match(bodySnippetRegex);
+        return bodySnippets;
+    }
+
+    private conactSnippetBody(bodyArray: Array<string>) {
+        return bodyArray.join('');
+    }
+
+    get getHtml() {
+        return this.source;
+    }
+
+    private log(msg: string) {
         console.log(msg)
     }
 
-    public start(){
-        this.log('Starting translating');
-        this.readFile();
-    }
 }
