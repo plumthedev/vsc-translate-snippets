@@ -1,81 +1,98 @@
 const html2pug: any = require('html2pug');
 
+import System from "./../modules/system";
+import Expression from "./../modules/expression";
+
 export default class jadeTranslator {
-    private source;
+    private args: {
+        source: string,
+        translatedPath: string,
+        translatedFilename: string
+    };
+    private system: System;
+    private expression: Expression;
+    private originalSource: string;
+    private originalSourceSnippets: Array<string>;
+    private translatedSource: string;
+    private translatedSourceSnippets: Array<string>;
 
-    constructor(source: any) {
-        this.source = source;
-        this.start();
+    constructor(args: {
+        source: string,
+        translatedPath: string,
+        translatedFilename: string
+    }) {
+        this.args = args;
+        this.system = new System();
+        this.expression = new Expression();
+        this.originalSource = this.system.readFile(this.args.source);
+        this.originalSourceSnippets = new Array(0);
+        this.translatedSource = this.system.readFile(this.args.source);
+        this.translatedSourceSnippets = new Array(0);
     }
 
-    public start() {
-        this.log('Starting translating');
-        this.startTranslation();
-    }
+    public translate() {
+        this.getSnippets();
 
-    private saveSource(source: string) {
-        this.source = source;
-    }
+        console.info(`Translating ${this.originalSourceSnippets.length} phrases`);
 
-    private startTranslation() {
-        const bodySnippets = this.getBodySnippets();
-
-        this.log(`Translating ${bodySnippets.length} phrases`);
-
-        bodySnippets.forEach((bodySnippet) => {
-            const translatedSnippet = this.translateSingleSnippet(bodySnippet);
-            const translatedSource = this.source.replace(bodySnippet, translatedSnippet);
-
-            this.saveSource(translatedSource);
+        this.originalSourceSnippets.forEach((snippet) => {
+            const translatedSnippet = this.translateSingleSnippet(snippet);
+            this.translatedSource = this.expression.replace(this.translatedSource, snippet, translatedSnippet)
         });
+
+        this.system.createFile(this.translatedSource, this.args.translatedPath, this.args.translatedFilename);
+        console.log('Translated!');
     }
 
-    private translateSingleSnippet(bodySnippet: string) {
-        const parsedSnippet = this.parseSnippet(bodySnippet);
-        const translatedSnippet = this.translateToPug(parsedSnippet);
-        const translatedSnippetString = this.stringifySnippet(translatedSnippet);
+    private prepareToTranslate(snippet: string){
+        let preparedSnippet: any = this.expression.replace(snippet, '"body": ', '');
+        preparedSnippet = this.expression.parse(preparedSnippet);
 
-        return translatedSnippetString;
+        if(preparedSnippet instanceof Array){
+            preparedSnippet = this.expression.createString(preparedSnippet);
+        }
+
+        return preparedSnippet;
     }
 
-    private translateToPug(snippetBody) {
-        return html2pug(snippetBody, { tabs: true, fragment: true });
+    private translateSingleSnippet(snippet: string) {
+        const prepared = this.prepareToTranslate(snippet);
+        const translated = this.translateToJade(prepared);
+
+        return translated;
     }
 
-    private stringifySnippet(snippet) {
-        const translatedSnippetArray = this.createTranslatedSnippedArray(snippet);
-        const translatedSnippetString = JSON.stringify(translatedSnippetArray);
+    private translateToJade(snippetBody: string) {
+        const translated: string = html2pug(snippetBody, { tabs: true, fragment: true });
+        const translatedArray: Array<string> = this.expression.createArray(translated, '\n');
+        const stringify: string = this.expression.stringify(translatedArray);
+        const readySnippet: string = this.expression.join('"body": ', stringify);
 
-        return translatedSnippetString;
+        this.translatedSourceSnippets.push(readySnippet);
+
+        return readySnippet;
     }
 
-    private parseSnippet(snippet) {
-        const snippetBodyArray = JSON.parse(snippet);
-        const snippetBodyString = this.conactSnippetBody(snippetBodyArray);
+    private getSnippets() {
+        const bodySnippetRegex: RegExp = /("body": \"[\s\S]+?\"$)|("body": \[[\s\S]+?\])/gm;
 
-        return snippetBodyString;
+        this.originalSourceSnippets = this.expression.match(bodySnippetRegex, this.originalSource);
     }
 
-    private createTranslatedSnippedArray(translatedSnippet: string) {
-        return translatedSnippet.split('\n');
+    get getOriginal() {
+        return this.originalSource;
     }
 
-    private getBodySnippets() {
-        const bodySnippetRegex = /(\[[\s\S]+?\])/g;
-        const bodySnippets = this.source.match(bodySnippetRegex);
-        return bodySnippets;
+    get getOriginalSnippets() {
+        return this.originalSourceSnippets;
     }
 
-    private conactSnippetBody(bodyArray: Array<string>) {
-        return bodyArray.join('');
+    get getJade(){
+        return this.translatedSource;
     }
 
-    get getHtml() {
-        return this.source;
-    }
-
-    private log(msg: string) {
-        console.log(msg)
+    get getJadeSnippets(){
+        return this.translatedSourceSnippets;
     }
 
 }

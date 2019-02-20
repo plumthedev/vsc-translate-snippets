@@ -48,6 +48,8 @@ If you want to contributing it is a free path
 
 * **Kacper Pruszynski** - *Initial work* - [plum](https://github.com/plumthedev)
 
+These people make this tool much more useful, more efficient and better, thanks a lot!
+* **Karol Jasik** - *added classes modules* [crusadeDev](https://github.com/crusadeDev)
 
 ## License
 
