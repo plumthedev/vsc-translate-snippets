@@ -10,7 +10,7 @@ export default class System {
     public createFile(data: string, path: string, filename: string) {
         this.createFolder(path);
 
-        fs.writeFile(`${path}${filename}`, data, (err: any) => {
+        fs.writeFileSync(`${path}${filename}`, data, (err: any) => {
             if (err) throw err;
         });
     }
@@ -21,7 +21,7 @@ export default class System {
         }
     }
 
-    public isFolderExits(path: string){
+    public isFolderExits(path: string) {
         return fs.existsSync(path)
     }
 
