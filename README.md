@@ -41,8 +41,6 @@ cd demo
 node index.js
 ```
 
-the demo has been shown in the **demo** folder
-
 ## Running the tests
 
 ```
