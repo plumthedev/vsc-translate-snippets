@@ -1,5 +1,5 @@
 import System from '../../src/modules/system';
-import { dirname } from 'path';
+//import { dirname } from 'path';
 
 const fs: any = require('fs');
 const system: any = new System();
