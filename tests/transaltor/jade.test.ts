@@ -31,7 +31,9 @@ describe("test private API", () => {
 
     test("getting body of snippet", () => {
         jadePrivate.getSnippets();
-        expect(jadePrivate.originalSourceSnippets).toEqual(dummyData.rawSnippet);
+        var snippet = `${jadePrivate.originalSourceSnippets[0]},${jadePrivate.originalSourceSnippets[1]}`.replace(/\s/g, "");
+        var expected = dummyData.rawSnippet.join().replace(/\s/g, "")
+        expect(snippet).toEqual(expected);
     })
 
     test("replace body,parsing, reutrn as string", () => {
