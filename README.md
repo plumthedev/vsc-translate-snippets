@@ -34,9 +34,6 @@ npm run build
 Demo
 
 ```
-git clone https://github.com/plumthedev/vsc-translate-snippets.git
-cd vsc-translate-snippets
-npm install
 cd demo
 node index.js
 ```
