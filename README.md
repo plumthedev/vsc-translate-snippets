@@ -1,6 +1,7 @@
-# VSC Translate Snippets
+# VSC Translate Snippets 
 
 Add more programming languages ​​for your Visual Studio Code snippet plugin
+[![Build Status](https://travis-ci.org/plumthedev/vsc-translate-snippets.svg?branch=master)](https://travis-ci.org/plumthedev/vsc-translate-snippets)
 
 ## Getting Started
 
@@ -30,15 +31,28 @@ Running
 npm run build
 ```
 
+Demo
+
+```
+git clone https://github.com/plumthedev/vsc-translate-snippets.git
+cd vsc-translate-snippets
+npm install
+cd demo
+node index.js
+```
+
 the demo has been shown in the **demo** folder
 
 ## Running the tests
 
-Right now I don't have any test but I will make up for it
+```
+npm run test
+```
 
 ## Built With
 
 * [html2pug](https://github.com/izolate/html2pug) - Converts HTML to Pug templating language by [izolate](https://github.com/izolate)
+* [jest](https://github.com/facebook/jest) - JavaScript Testing Framework by [Facebook](https://github.com/facebook)
 
 ## Contributing
 
@@ -49,7 +63,7 @@ If you want to contributing it is a free path
 * **Kacper Pruszynski** - *Initial work* - [plum](https://github.com/plumthedev)
 
 These people make this tool much more useful, more efficient and better, thanks a lot!
-* **Karol Jasik** - *added classes modules* [crusadeDev](https://github.com/crusadeDev)
+* **Karol Jasik** - *Added classes modules and tests* - [crusadeDev](https://github.com/crusadeDev)
 
 ## License
 
