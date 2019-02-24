@@ -2,7 +2,7 @@ import Expression from "../../src/modules/expression";
 
 const jadeTranslator = new Expression();
 
-describe("data organzation,connect,sorting", () => {
+describe("data organzation,connection,sorting", () => {
 
     const dummyData = {
         string: "The quick brown fox jumps over the lazy dog.",
@@ -14,39 +14,45 @@ describe("data organzation,connect,sorting", () => {
     }
 
     test("concat 2 arrays", () => {
-        const string = jadeTranslator.join("typescript", " governs");
-        expect(string).toBe("typescript governs");
+        const received = jadeTranslator.join("typescript", " governs");
+        expect(received).toEqual("typescript governs");
     })
 
     test("stringify object to json", () => {
-        const json = jadeTranslator.stringify(dummyData.object);
-        expect(json).toBe('{"type":"json","body":"<div></div>"}');
+        const received = jadeTranslator.stringify(dummyData.object);
+        expect(received).toEqual('{"type":"json","body":"<div></div>"}');
     })
 
     test("create array from string", () => {
-        const array = jadeTranslator.createArray(dummyData.string, " ");
-        expect(array).toEqual(array);
+        const received = jadeTranslator.createArray(dummyData.string, " ");
+        expect(received).toEqual(received);
     })
 
     test("create string from array", () => {
-        const string = jadeTranslator.createString(dummyData.array);
-        expect(string).toEqual("Thequickbrownfoxjumpsoverthelazydog.");
+        const received = jadeTranslator.createString(dummyData.array);
+        expect(received).toEqual("Thequickbrownfoxjumpsoverthelazydog.");
     })
 
     test("Parse json", () => {
-        const jsObject = jadeTranslator.parse(dummyData.json);
-        expect(jsObject).toEqual({ "type": "json", "body": "<div></div>" });
+        const received = jadeTranslator.parse(dummyData.json);
+        expect(received).toEqual({ "type": "json", "body": "<div></div>" });
     })
 
     test("match string with regex", () => {
-        const match = jadeTranslator.match(dummyData.regex, dummyData.string);
-        expect(match).toEqual(["fox"]);
+        const received = jadeTranslator.match(dummyData.regex, dummyData.string);
+        expect(received).toEqual(["fox"]);
     })
 
-    test("replace part of the string", () => {
-        const stringString = jadeTranslator.replace(dummyData.string, dummyData.patern, "cat");
-        const stringRegex = jadeTranslator.replace(dummyData.string, dummyData.regex, "cat");
-        expect(stringRegex).toEqual("The quick brown cat jumps over the lazy dog.")
-        expect(stringString).toEqual("The quick brown cat jumps over the lazy dog.")
+    describe("replace part of the string", () => {
+        const receivedString = jadeTranslator.replace(dummyData.string, dummyData.patern, "cat");
+        const receivedRegex = jadeTranslator.replace(dummyData.string, dummyData.regex, "cat");
+
+        test("Replace using string",()=>{
+            expect(receivedString).toEqual("The quick brown cat jumps over the lazy dog.")
+        })
+        
+        test("replaceda using regex",()=>{
+            expect(receivedRegex).toEqual("The quick brown cat jumps over the lazy dog.")
+        })
     })
 })
