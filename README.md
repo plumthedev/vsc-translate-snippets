@@ -62,6 +62,6 @@ These people make this tool much more useful, more efficient and better, thanks 
 
 ## License
 
-Open Source <3
+ GNU GPL v3
 
 
