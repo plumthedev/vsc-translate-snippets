@@ -8,8 +8,17 @@
     "build": "tsc",
     "test": "jest --silent"
   },
+  "homepage": "https://github.com/plumthedev/vsc-translate-snippets#readme",
   "author": "plum",
-  "license": "ISC",
+  "contributors": [{
+    "name": "Karol Jasik",
+    "url": "https://github.com/crusadeDev"
+  }],
+  "license": "GNU GPL v3",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/plumthedev/vsc-translate-snippets.git"
+  },
   "devDependencies": {
     "@types/jest": "^24.0.6",
     "@types/node": "^11.9.4",
