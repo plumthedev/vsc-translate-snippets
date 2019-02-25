@@ -1,5 +1,7 @@
 # VSC Translate Snippets 
 [![Build Status](https://travis-ci.org/plumthedev/vsc-translate-snippets.svg?branch=master)](https://travis-ci.org/plumthedev/vsc-translate-snippets)
+
+
 [![NPM](https://nodei.co/npm/vsc-translate-snippets.png)](https://nodei.co/npm/vsc-translate-snippets/)
 
 Add more programming languages ​​for your Visual Studio Code snippet plugin
