@@ -19,10 +19,12 @@
     "type": "git",
     "url": "https://github.com/plumthedev/vsc-translate-snippets.git"
   },
+  "dependencies": {
+    "html2pug": "^2.0.1"
+  },
   "devDependencies": {
     "@types/jest": "^24.0.6",
     "@types/node": "^11.9.4",
-    "html2pug": "^2.0.1",
     "jest": "^24.1.0",
     "ts-jest": "^24.0.0",
     "typescript": "^3.3.3"

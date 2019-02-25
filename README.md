@@ -6,6 +6,12 @@
 
 Add more programming languages ​​for your Visual Studio Code snippet plugin
 
+## Supported languages
+
+For the present moment we support 1 programming language
+
+* from **HTML** to **Pug/Jade**
+
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
@@ -22,23 +28,35 @@ npm install
 
 A step by step series of examples that tell you how to get a development env running
 
-Development
+#### Development
 
 ```
 npm run dev
 ```
 
-Running
+#### Running
 
 ```
 npm run build
 ```
 
-Demo
+#### Demo show
 
 ```
 cd demo
 node index.js
+```
+
+#### Usage in code
+
+```
+const { vscts } = require('vsc-translate-snippets');
+
+vscts.jade({
+    source: './data/snippets.json', // path to your original source file
+    translatedPath: './translated/', // path to the folder where the translation file will be placed
+    translatedFilename: 'jade-snippets.json' // name of translation file 
+});
 ```
 
 ## Running the tests
