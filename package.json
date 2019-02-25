@@ -1,8 +1,8 @@
 {
   "name": "vsc-translate-snippets",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Add more programming languages ​​for your Visual Studio Code snippet plugin",
-  "main": "index.js",
+  "main": "./dist/vsc-translate-snippets.js",
   "scripts": {
     "dev": "tsc --watch",
     "build": "tsc",

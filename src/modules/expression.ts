@@ -1,5 +1,5 @@
 export default class Expression {
-    public replace(string: string, find: RegExp | string, replace: string) {
+    public replace(string: string, find: RegExp | string, replace: string): string {
         return string.replace(find, replace);
     }
 
@@ -15,7 +15,7 @@ export default class Expression {
         return array.join(glue);
     }
 
-    public createArray(string: string, delimiter: string) {
+    public createArray(string: string, delimiter: string): Array<string> {
         return string.split(delimiter);
     }
 
@@ -23,7 +23,7 @@ export default class Expression {
         return JSON.stringify(value);
     }
 
-    public join(main: string, addon: string) {
+    public join(main: string, addon: string): string {
         return main.concat(addon);
     }
 }

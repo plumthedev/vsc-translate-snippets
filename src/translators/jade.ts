@@ -30,7 +30,7 @@ export default class jadeTranslator {
         this.translatedSourceSnippets = new Array(0);
     }
 
-    public translate() {
+    public translate(): void {
         this.getSnippets();
 
         console.info(`Translating ${this.originalSourceSnippets.length} phrases`);
@@ -44,7 +44,7 @@ export default class jadeTranslator {
         console.log('Translated!');
     }
 
-    private prepareToTranslate(snippet: string){
+    private prepareToTranslate(snippet: string): string{
         let preparedSnippet: any = this.expression.replace(snippet, '"body": ', '');
         preparedSnippet = this.expression.parse(preparedSnippet);
 
@@ -55,14 +55,14 @@ export default class jadeTranslator {
         return preparedSnippet;
     }
 
-    private translateSingleSnippet(snippet: string) {
+    private translateSingleSnippet(snippet: string): string {
         const prepared = this.prepareToTranslate(snippet);
         const translated = this.translateToJade(prepared);
 
         return translated;
     }
 
-    private translateToJade(snippetBody: string) {
+    private translateToJade(snippetBody: string): string {
         const translated: string = html2pug(snippetBody, { tabs: true, fragment: true });
         const translatedArray: Array<string> = this.expression.createArray(translated, '\n');
         const stringify: string = this.expression.stringify(translatedArray);
@@ -73,25 +73,25 @@ export default class jadeTranslator {
         return readySnippet;
     }
 
-    private getSnippets() {
+    private getSnippets(): void {
         const bodySnippetRegex: RegExp = /("body": \"[\s\S]+?\"$)|("body": \[[\s\S]+?\])/gm;
 
         this.originalSourceSnippets = this.expression.match(bodySnippetRegex, this.originalSource);
     }
 
-    get getOriginal() {
+    get getOriginal(): string {
         return this.originalSource;
     }
 
-    get getOriginalSnippets() {
+    get getOriginalSnippets(): Array<string> {
         return this.originalSourceSnippets;
     }
 
-    get getJade(){
+    get getJade(): string{
         return this.translatedSource;
     }
 
-    get getJadeSnippets(){
+    get getJadeSnippets(): Array<string>{
         return this.translatedSourceSnippets;
     }
 
